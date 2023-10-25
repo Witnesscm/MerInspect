@@ -1,0 +1,6 @@
+package-as: MerInspect
+
+ignore:
+  - .gitignore
+  - .github/*
+  - README.md
