@@ -20,3 +20,4 @@ InspectUnitGemAndEnchant.lua
 InspectUnitSpecialization.lua
 InspectUnitStats.lua
 InspectUnitStatsHonor.lua
+Misc.lua

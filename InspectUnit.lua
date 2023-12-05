@@ -245,6 +245,10 @@ LibEvent:attachTrigger("INSPECT_FRAME_SHOWN", function(self, frame, parent, ilev
     if (f == "InspectFrame" or f == "PaperDollFrame") then
         x, y = 33, 14
     end
+    -- SoD rune frame
+    if (f == "PaperDollFrame" and EngravingFrame and EngravingFrame:IsVisible()) then
+        x = -178
+    end
     local backdrop = frame:GetBackdrop()
     if (MerInspectDB and MerInspectDB.ShowInspectAngularBorder) then
         backdrop.edgeSize = 1
