@@ -11,6 +11,7 @@ local addon, ns = ...
 
 ns.IsClassic = _G.WOW_PROJECT_ID == _G.WOW_PROJECT_CLASSIC
 ns.IsWrath = _G.WOW_PROJECT_ID == _G.WOW_PROJECT_WRATH_CLASSIC
+ns.IsClassicSoD = ns.IsClassic and C_Engraving and C_Engraving.IsEngravingEnabled()
 
 local L = ns.L or {}
 

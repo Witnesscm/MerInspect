@@ -1,3 +1,5 @@
+local _, ns = ...
+
 -- zhCN localization error
 do
     if not InspectTalentFrameSpentPoints then
@@ -15,7 +17,7 @@ do
         frame:SetPoint("TOPLEFT", PaperDollFrame, "TOPRIGHT", offset - x, -14)
     end
 
-    if C_Engraving and C_Engraving.IsEngravingEnabled() then
+    if ns.IsClassicSoD then
         hooksecurefunc("ToggleEngravingFrame", ReanchorInspect)
     end
 end
