@@ -26,6 +26,9 @@ local function CreateStatFrame(parent, index, key, option)
     frame:SetWidth(178)
     frame.key = key
     frame.Background:SetShown((index%2) ~= 1)
+    frame.Label:SetWidth(120)
+    frame.Label:SetJustifyH("LEFT")
+    frame.Label:SetWordWrap(false)
     parent["stat" .. index] = frame
     return frame
 end
@@ -133,44 +136,42 @@ function ClassicStatsFrameTemplate_OnShow(self)
         button:Show()
     end
     local hasEnhancements = false
-    local offset = 0
+    local anchor = self.EnhancementsCategory
     for k, v in pairs(self.data.static) do
         if (not strfind(self.allStaticKeys, ","..k..",")) then
             button = GetStatFrame(self)
             button.Label:SetText(GetStatsName(k))
             button.Value:SetText(GetStatsValue(k, self.data.static))
             button:Show()
-            button:SetPoint("TOPLEFT", self.EnhancementsCategory, "BOTTOMLEFT", 0, offset)
+            button:SetPoint("TOPLEFT", anchor, "BOTTOMLEFT")
             height = height + 15
-            offset = offset - 15
+            anchor = button
             hasEnhancements = true
         end
     end
+    if (hasEnhancements) then
+        self.EnhancementsCategory:Show()
+        self.SuitCategory:SetPoint("TOPLEFT", anchor, "BOTTOMLEFT")
+        height = height + 36
+    else
+        self.EnhancementsCategory:Hide()
+        self.SuitCategory:SetPoint("TOPLEFT", self.EnhancementsCategory, "TOPLEFT")
+    end
     local hasSuit = self.data.suit
     if (hasSuit) then
-        if (not hasEnhancements) then
-            offset = offset + 36
-        end
-        offset = offset - 6
         self.SuitCategory:Show()
-        self.SuitCategory:SetPoint("TOPLEFT", self.EnhancementsCategory, "BOTTOMLEFT", 0, offset)
-        height = height + 36 + 2
-        offset = offset - 36 + 6
+        anchor = self.SuitCategory
         for _, v in ipairs(self.data.suit) do
             button = GetStatFrame(self)
-            button.Label:SetText(v.colorStr .. v.value)
+            button.Label:SetText(v.colorStr .. v.name)
+            button.Value:SetText(v.colorStr .. format("(%s)", v.value))
             button:Show()
-            button:SetPoint("TOPLEFT", self.EnhancementsCategory, "BOTTOMLEFT", 0, offset)
+            button:SetPoint("TOPLEFT", anchor, "BOTTOMLEFT")
             height = height + 15
-            offset = offset - 15
+            anchor = button
         end
     else
         self.SuitCategory:Hide()
-    end
-    if (hasEnhancements) then
-        self.EnhancementsCategory:Show()
-    else
-        self.EnhancementsCategory:Hide()
     end
     height = max(height, 424)
     self:SetHeight(height)
