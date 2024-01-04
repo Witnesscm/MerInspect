@@ -155,7 +155,7 @@ local function ShowGemAndEnchant(frame, ItemLink, anchorFrame, itemframe, unit)
         if (v.link) then
             _, _, quality, _, _, _, _, _, _, texture = GetItemInfo(v.link)
             r, g, b = GetItemQualityColor(quality or 0)
-            icon.bg:SetVertexColor(r, g, b)
+            icon.bg:SetVertexColor(r, g, b, 1)
             icon.texture:SetTexture(texture or "Interface\\Cursor\\Quest")
             UpdateIconTexture(icon, texture, v.link, "item")
         elseif (v.texture) then
@@ -178,7 +178,7 @@ local function ShowGemAndEnchant(frame, ItemLink, anchorFrame, itemframe, unit)
         icon = GetIconFrame(frame)
         _, ItemLink, quality, _, _, _, _, _, _, texture = GetItemInfo(enchantItemID)
         r, g, b = GetItemQualityColor(quality or 0)
-        icon.bg:SetVertexColor(r, g, b)
+        icon.bg:SetVertexColor(r, g, b, 1)
         icon.texture:SetTexture(texture)
         UpdateIconTexture(icon, texture, enchantItemID, "item")
         icon.itemLink = ItemLink
@@ -190,7 +190,7 @@ local function ShowGemAndEnchant(frame, ItemLink, anchorFrame, itemframe, unit)
         num = num + 1
         icon = GetIconFrame(frame)
         _, _, texture = GetSpellInfo(enchantSpellID)
-        icon.bg:SetVertexColor(1,0.82,0)
+        icon.bg:SetVertexColor(1, 0.82, 0, 1)
         icon.texture:SetTexture(texture)
         UpdateIconTexture(icon, texture, enchantSpellID, "spell")
         icon.spellID = enchantSpellID
@@ -202,7 +202,7 @@ local function ShowGemAndEnchant(frame, ItemLink, anchorFrame, itemframe, unit)
         num = num + 1
         icon = GetIconFrame(frame)
         icon.title = "#" .. enchantID
-        icon.bg:SetVertexColor(0.1, 0.1, 0.1)
+        icon.bg:SetVertexColor(0.1, 0.1, 0.1, 1)
         icon.texture:SetTexture("Interface\\FriendsFrame\\InformationIcon")
         icon:ClearAllPoints()
         icon:SetPoint("LEFT", anchorFrame, "RIGHT", num == 1 and 6 or 1, 0)
@@ -229,6 +229,30 @@ local function ShowGemAndEnchant(frame, ItemLink, anchorFrame, itemframe, unit)
             icon.title = L.BeltBuckle
             icon.bg:SetVertexColor(1, 0.2, 0.2, 0.6)
             icon.texture:SetTexture("Interface\\Cursor\\Quest")
+            icon:ClearAllPoints()
+            icon:SetPoint("LEFT", anchorFrame, "RIGHT", num == 1 and 6 or 1, 0)
+            icon:Show()
+            anchorFrame = icon
+        end
+    end
+    if ns.IsClassicSoD and LibItemEnchant:IsEquipmentSlotEngravable(itemframe.index) then
+        num = num + 1
+        icon = GetIconFrame(frame)
+        local runeName, runeSpellID = LibItemEnchant:GetRuneInfo(unit, itemframe.index)
+        if runeName then
+            _, _, texture = GetSpellInfo(runeSpellID)
+            icon.bg:SetVertexColor(0.64, 0.2, 0.93, 1)
+            icon.texture:SetTexture(texture)
+            UpdateIconTexture(icon, texture, runeSpellID, "spell")
+            icon.spellID = runeSpellID
+            icon:ClearAllPoints()
+            icon:SetPoint("LEFT", anchorFrame, "RIGHT", num == 1 and 6 or 1, 0)
+            icon:Show()
+            anchorFrame = icon
+        else
+            icon.title = RUNES
+            icon.bg:SetVertexColor(1, 0.2, 0.2, 0.6)
+            icon.texture:SetTexture("Interface\\Cursor\\UnableQuest")
             icon:ClearAllPoints()
             icon:SetPoint("LEFT", anchorFrame, "RIGHT", num == 1 and 6 or 1, 0)
             icon:Show()

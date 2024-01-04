@@ -8,6 +8,9 @@ local lib = LibStub:NewLibrary(MAJOR, MINOR)
 
 if not lib then return end
 
+lib.ScanTip = CreateFrame("GameTooltip", "LibItemEnchant_ScanTooltip", nil, "GameTooltipTemplate")
+lib.ScanTipName = lib.ScanTip:GetName()
+
 -- GENERATE BY https://wago.tools/db2/ItemEffect
 local EnchantItemDB = {
     [15] = 2304, -- 轻型护甲片
@@ -737,4 +740,49 @@ function lib:GetEnchantInfo(link, slotID)
     local enchantItemID = EnchantItemDB[enchantID]
     local enchantSpellID = EnchantMultiSpellDB[enchantID] and EnchantMultiSpellDB[enchantID][slotID] or EnchantSpellDB[enchantID]
     return enchantItemID, enchantSpellID, enchantID
+end
+
+if not (C_Engraving and C_Engraving.IsEngravingEnabled()) then return end
+
+local EnchantRuneDB
+local locale = GetLocale()
+-- GENERATE BY script.py
+if (locale == "enUS" or locale == "enGB") then
+    EnchantRuneDB = {["Deadly Brew"] = 399969, ["Between the Eyes"] = 400033, ["Just a Flesh Wound"] = 400039, ["Mutilate"] = 399962, ["Quick Draw"] = 398197, ["Blade Dance"] = 400038, ["Shadowstrike"] = 400031, ["Arcane Blast"] = 401729, ["Burnout"] = 415460, ["Ice Lance"] = 401732, ["Rewind Time"] = 401734, ["Fingers of Frost"] = 401741, ["Regeneration"] = 401743, ["Living Flame"] = 401744, ["Prayer of Mending"] = 402832, ["Shadow Word: Death"] = 402833, ["Homunculi"] = 402836, ["Shared Pain"] = 402838, ["Circle of Healing"] = 402842, ["Penance"] = 402844, ["Envenom"] = 399968, ["Victory Rush"] = 403434, ["Flagellation"] = 403344, ["Endless Rage"] = 403349, ["Blood Frenzy"] = 403352, ["Devastate"] = 403355, ["Furious Thunder"] = 403356, ["Haunt"] = 403858, ["Chaos Bolt"] = 403860, ["Soul Siphon"] = 403863, ["Master Channeler"] = 403868, ["Shadow Bolt Volley"] = 403871, ["Lake of Fire"] = 403872, ["Metamorphosis"] = 403873, ["Beacon of Light"] = 409906, ["Hand of Reckoning"] = 409911, ["Crusader Strike"] = 409914, ["Divine Storm"] = 409924, ["Seal of Martyrdom"] = 409925, ["Avenger's Shield"] = 409933, ["Divine Sacrifice"] = 409935, ["Inspiration Exemplar"] = 409936, ["Wild Strikes"] = 409805, ["Wild Growth"] = 409810, ["Savage Roar"] = 409819, ["Lifebloom"] = 409824, ["Nature's Fury"] = 409826, ["Mangle"] = 409828, ["Fury of Stormrage"] = 409832, ["Dual Wield Specialization"] = 409940, ["Water Shield"] = 409941, ["Shield Mastery"] = 409943, ["Ancestral Guidance"] = 409944, ["Overload"] = 409945, ["Earth Shield"] = 409947, ["Lava Burst"] = 409952, ["Lava Lash"] = 409953, ["Way of Earth"] = 409955, ["Master Marksman"] = 409958, ["Heart of the Lion"] = 409960, ["Beast Mastery"] = 409962, ["Kill Command"] = 409974, ["Chimera Shot"] = 409976, ["Explosive Shot"] = 409978, ["Lone Wolf"] = 409979, ["Earthliving Weapon"] = 415290, ["Enlightenment"] = 415729, ["Living Bomb"] = 401731, ["Mass Regeneration"] = 415467, ["Serendipity"] = 415737, ["Mind Sear"] = 415738, ["Strength of Soul"] = 415740, ["Focused Rage"] = 415745, ["Single-Minded Fury"] = 415599, ["Everlasting Affliction"] = 415604, ["Demonic Tactics"] = 415605, ["Incinerate"] = 415750, ["Exorcist"] = 415756, ["Skull Bash"] = 415759, ["Survival of the Fittest"] = 415709, ["Lacerate"] = 415760, ["Living Seed"] = 415761, ["Sunfire"] = 414692, ["Healing Rain"] = 415714, ["Sniper Training"] = 415818, ["Starsurge"] = 424715, ["Saber Slash"] = 424979, ["Shiv"] = 424980, ["Main Gauche"] = 424982, ["Slaughter from the Shadows"] = 424983, ["Icy Veins"] = 425169, ["Arcane Surge"] = 425168, ["Power Word: Barrier"] = 425212, ["Twisted Faith"] = 425210, ["Void Plague"] = 425211, ["Shamanistic Rage"] = 425341, ["Molten Blast"] = 425340, ["Quick Strike"] = 425428, ["Raging Blow"] = 425429, ["Warbringer"] = 425430, ["Consumed by Rage"] = 425440, ["Frenzied Assault"] = 425442, ["Demonic Pact"] = 425473, ["Demonic Grace"] = 425474, ["Horn of Lordaeron"] = 425614, ["Aegis"] = 425615, ["Rebuke"] = 425616, ["Carve"] = 425754, ["Cobra Strikes"] = 425755, ["Serpent Spread"] = 425756, ["Flanking Strike"] = 425757, }
+elseif locale == "zhCN" then
+    EnchantRuneDB = {["致命阴谋"] = 399969, ["正中眉心"] = 400033, ["只是皮肉伤"] = 400039, ["毁伤"] = 399962, ["速射"] = 398197, ["刃舞"] = 400038, ["暗影打击"] = 400031, ["奥术冲击"] = 401729, ["燃尽"] = 415460, ["冰枪术"] = 401732, ["时光倒转"] = 401734, ["寒冰指"] = 401741, ["再生"] = 401743, ["活体烈焰"] = 401744, ["愈合祷言"] = 402832, ["暗言术：灭"] = 402833, ["裂魂魔"] = 402836, ["分担痛苦"] = 402838, ["治疗之环"] = 402842, ["苦修"] = 402844, ["毒伤"] = 399968, ["乘胜追击"] = 403434, ["狂热鞭笞"] = 403344, ["无尽怒气"] = 403349, ["血之狂暴"] = 403352, ["毁灭打击"] = 403355, ["狂怒雷霆"] = 403356, ["鬼影缠身"] = 403858, ["混乱之箭"] = 403860, ["灵魂虹吸"] = 403863, ["引导大师"] = 403868, ["暗影箭雨"] = 403871, ["火焰之湖"] = 403872, ["恶魔变形"] = 403873, ["圣光道标"] = 409906, ["清算之手"] = 409911, ["十字军打击"] = 409914, ["神圣风暴"] = 409924, ["殉道圣印"] = 409925, ["复仇者之盾"] = 409933, ["神圣牺牲"] = 409935, ["激励典范"] = 409936, ["狂野打击"] = 409805, ["野性成长"] = 409810, ["野蛮咆哮"] = 409819, ["生命绽放"] = 409824, ["自然之怒"] = 409826, ["割碎"] = 409828, ["怒风之怒"] = 409832, ["双武器专精"] = 409940, ["水之护盾"] = 409941, ["盾牌精通"] = 409943, ["先祖指引"] = 409944, ["过载"] = 409945, ["大地之盾"] = 409947, ["熔岩爆裂"] = 409952, ["熔岩猛击"] = 409953, ["土之道"] = 409955, ["神射手"] = 409958, ["雄狮之心"] = 409960, ["野兽控制"] = 409962, ["杀戮命令"] = 409974, ["奇美拉射击"] = 409976, ["爆炸射击"] = 409978, ["独来独往"] = 409979, ["大地生命武器"] = 415290, ["启迪"] = 415729, ["活动炸弹"] = 401731, ["群体再生"] = 415467, ["妙手回春"] = 415737, ["精神灼烧"] = 415738, ["灵魂之力"] = 415740, ["怒火聚焦"] = 415745, ["鲁莽怒火"] = 415599, ["持久痛苦"] = 415604, ["恶魔战术"] = 415605, ["烧尽"] = 415750, ["驱魔人"] = 415756, ["迎头痛击"] = 415759, ["优胜劣汰"] = 415709, ["割伤"] = 415760, ["生命之种"] = 415761, ["阳炎术"] = 414692, ["治疗之雨"] = 415714, ["狙击训练"] = 415818, ["星涌术"] = 424715, ["军刀猛刺"] = 424979, ["毒刃"] = 424980, ["左右开弓"] = 424982, ["暗影杀手"] = 424983, ["冰冷血脉"] = 425169, ["奥术涌动"] = 425168, ["真言术：障"] = 425212, ["扭曲信仰"] = 425210, ["虚空疫病"] = 425211, ["萨满之怒"] = 425341, ["熔火爆裂"] = 425340, ["迅捷打击"] = 425428, ["怒击"] = 425429, ["战神"] = 425430, ["噬心狂怒"] = 425440, ["狂乱攻击"] = 425442, ["恶魔契约"] = 425473, ["恶魔优雅"] = 425474, ["洛丹伦号角"] = 425614, ["神盾"] = 425615, ["责难"] = 425616, ["削凿"] = 425754, ["眼镜蛇打击"] = 425755, ["毒蛇扩散"] = 425756, ["侧翼打击"] = 425757, }
+elseif locale == "zhTW" then
+    EnchantRuneDB = {["致命毒釀"] = 399969, ["正中眉心"] = 400033, ["不過是點皮肉傷"] = 400039, ["截肢"] = 399962, ["拔槍快手"] = 398197, ["劍刃之舞"] = 400038, ["暗影打擊"] = 400031, ["秘法衝擊"] = 401729, ["燃盡"] = 415460, ["冰霜長矛"] = 401732, ["時光倒流"] = 401734, ["冰霜之指"] = 401741, ["再生"] = 401743, ["活化烈焰"] = 401744, ["癒合禱言"] = 402832, ["暗言術：死"] = 402833, ["魔胎"] = 402836, ["共享苦痛"] = 402838, ["治療之環"] = 402842, ["懺悟"] = 402844, ["毒化"] = 399968, ["勝利衝擊"] = 403434, ["鞭策"] = 403344, ["無盡狂怒"] = 403349, ["血之狂暴"] = 403352, ["挫敗"] = 403355, ["盛怒轟雷"] = 403356, ["蝕魂術"] = 403858, ["混沌箭"] = 403860, ["靈魂虹吸"] = 403863, ["引導大師"] = 403868, ["暗影箭雨"] = 403871, ["火焰之湖"] = 403872, ["惡魔化身"] = 403873, ["聖光信標"] = 409906, ["清算聖禦"] = 409911, ["十字軍聖擊"] = 409914, ["神性風暴"] = 409924, ["殉難聖印"] = 409925, ["復仇之盾"] = 409933, ["神性犧牲"] = 409935, ["鼓舞楷模"] = 409936, ["狂野打擊"] = 409805, ["野性痊癒"] = 409810, ["兇蠻咆哮"] = 409819, ["生命之花"] = 409824, ["自然烈怒"] = 409826, ["割碎"] = 409828, ["怒風之怒"] = 409832, ["雙武器專精"] = 409940, ["水之盾"] = 409941, ["精通盾牌"] = 409943, ["先祖導引"] = 409944, ["超載"] = 409945, ["大地之盾"] = 409947, ["熔岩爆發"] = 409952, ["熔岩暴擊"] = 409953, ["大地之道"] = 409955, ["狙擊大師"] = 409958, ["猛獅之心"] = 409960, ["野獸控制"] = 409962, ["擊殺命令"] = 409974, ["奇美拉射擊"] = 409976, ["爆裂射擊"] = 409978, ["孤狼"] = 409979, ["大地生命武器"] = 415290, ["啟蒙"] = 415729, ["活體爆彈"] = 401731, ["群體恢復"] = 415467, ["機緣回復"] = 415737, ["心靈烙印"] = 415738, ["靈魂之力"] = 415740, ["集中怒氣"] = 415745, ["一心狂怒"] = 415599, ["無間痛苦"] = 415604, ["惡魔策略"] = 415605, ["燒盡"] = 415750, ["驅邪術"] = 415756, ["碎顱猛擊"] = 415759, ["適者生存"] = 415709, ["割裂"] = 415760, ["生命種子"] = 415761, ["日炎術"] = 414692, ["治癒之雨"] = 415714, ["狙擊訓練"] = 415818, ["星湧術"] = 424715, ["刀劍斬擊"] = 424979, ["毒襲"] = 424980, ["左右開弓"] = 424982, ["伏影抹殺"] = 424983, ["冰寒脈動"] = 425169, ["秘法奔騰"] = 425168, ["真言術：壁"] = 425212, ["扭曲信念"] = 425210, ["虛無瘟疫"] = 425211, ["薩滿之怒"] = 425341, ["熔岩爆裂"] = 425340, ["快速打擊"] = 425428, ["狂怒之擊"] = 425429, ["戰爭使者"] = 425430, ["怒火攻心"] = 425440, ["狂暴襲擊"] = 425442, ["惡魔契印"] = 425473, ["魔化恩典"] = 425474, ["羅德隆號角"] = 425614, ["神禦"] = 425615, ["責難"] = 425616, ["橫劈"] = 425754, ["眼鏡蛇之擊"] = 425755, ["蛇毒蔓延"] = 425756, ["側翼攻擊"] = 425757, }
+end
+
+function lib:IsEquipmentSlotEngravable(slot)
+    if not EnchantRuneDB then return false end
+
+    if not lib.RuneCategories then
+        lib.RuneCategories = {}
+        C_Engraving.RefreshRunesList()
+        for _, categories in ipairs(C_Engraving.GetRuneCategories(false, false)) do
+            lib.RuneCategories[categories] = true
+        end
+    end
+
+    return not not lib.RuneCategories[slot]
+end
+
+function lib:GetRuneInfo(unit, slot)
+    if not EnchantRuneDB then return end
+
+    local tip = lib.ScanTip
+    tip:SetOwner(UIParent, "ANCHOR_NONE")
+    tip:SetInventoryItem(unit, slot)
+    for i = 2, tip:NumLines() do
+        local line = _G[lib.ScanTipName.."TextLeft"..i]
+        if not line then break end
+
+        local text = line:GetText()
+        local spell = text and EnchantRuneDB[text]
+        if spell then
+            return text, spell
+        end
+    end
 end
