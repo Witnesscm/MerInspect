@@ -749,11 +749,12 @@ lib.EnchantRuneDB = {}
 do
     local CURRENT_MASK
     local CURRENT_ID
-    local LOCAL_INDEX = {}
+    local LOCALE_INDEX = {}
+    local LOCALE = GetLocale()
 
     local function DefineLocalIndexs(val)
         for i, locale in ipairs(strsplittable('/', val)) do
-            LOCAL_INDEX[locale] = i
+            LOCALE_INDEX[locale] = i
         end
     end
 
@@ -764,8 +765,7 @@ do
     end
 
     local function SetRuneName(names)
-        local locale = GetLocale()
-        local index = LOCAL_INDEX[locale] or LOCAL_INDEX.enUS
+        local index = LOCALE_INDEX[LOCALE] or LOCALE_INDEX.enUS
         local name = strsplittable('/', names)[index]
         lib.EnchantRuneDB[CURRENT_MASK][name] = CURRENT_ID
     end
