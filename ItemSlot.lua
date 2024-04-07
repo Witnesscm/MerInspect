@@ -170,7 +170,7 @@ local function ChatItemSlot(Hyperlink)
     local name, _, quality, level, _, class, subclass, _, equipSlot = GetItemInfo(link)
     if (equipSlot == "INVTYPE_CLOAK" or equipSlot == "INVTYPE_TRINKET" or equipSlot == "INVTYPE_FINGER" or equipSlot == "INVTYPE_NECK") then
         slot = _G[equipSlot] or equipSlot
-    elseif (equipSlot == "INVTYPE_RANGEDRIGHT") then
+    elseif (equipSlot == "INVTYPE_RANGEDRIGHT" or equipSlot == "INVTYPE_NON_EQUIP_IGNORE") then
         slot = subclass
     elseif (equipSlot and string.find(equipSlot, "INVTYPE_")) then
         slot = format("%s-%s", subclass or "", _G[equipSlot] or equipSlot)
