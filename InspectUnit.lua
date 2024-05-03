@@ -2,6 +2,7 @@
 -------------------------------------
 -- 查看装备等级 Author: M
 -------------------------------------
+local addon, ns = ...
 
 local locale = GetLocale()
 
@@ -58,7 +59,7 @@ local function GetInspectItemListFrame(parent)
         frame.level = frame:CreateFontString(nil, "ARTWORK", itemfont)
         frame.level:SetPoint("TOPLEFT", frame, "TOPLEFT", 66, -42)
         frame.level:SetFont(frame.level:GetFont(), 12, "THINOUTLINE")
-        
+
         local itemframe
         local fontsize = locale:sub(1,2) == "zh" and 12 or 9
         local backdrop = {
@@ -121,7 +122,7 @@ local function GetInspectItemListFrame(parent)
             frame["item"..i] = itemframe
             LibEvent:trigger("INSPECT_ITEMFRAME_CREATED", itemframe)
         end
-        
+
         frame.closeButton = CreateFrame("Button", nil, frame)
         frame.closeButton:SetSize(12, 12)
         frame.closeButton:SetScale(0.85)
@@ -242,7 +243,7 @@ end)
 
 LibEvent:attachTrigger("INSPECT_FRAME_SHOWN", function(self, frame, parent, ilevel)
     local x, y, f = 0, 0, parent:GetName()
-    if (f == "InspectFrame" or f == "PaperDollFrame") then
+    if (f == "InspectFrame" or (f == "PaperDollFrame" and not ns.IsCata)) then
         x, y = 33, 14
     end
     -- SoD rune frame

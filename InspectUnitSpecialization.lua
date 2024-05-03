@@ -4,6 +4,7 @@
 -- @Author: M
 -- @DepandsOn: InspectUnit.lua
 ---------------------------------------
+local addon, ns = ...
 
 local LibEvent = LibStub:GetLibrary("LibEvent.7000")
 
@@ -19,7 +20,13 @@ local function GetInspectTalentInfo(unit)
     for i = 1, 3 do
         cache[i] = {}
 
-        local name, icon, point = GetTalentTabInfo(i, isInspect, false, talentGroup)
+        local name, icon, point, _
+        if ns.IsCata then
+            _, name, _, icon, point = GetTalentTabInfo(i, isInspect, false, talentGroup)
+        else
+            name, icon, point = GetTalentTabInfo(i, isInspect, false, talentGroup)
+        end
+
         if point > higher then
             higher = point
             index = i
