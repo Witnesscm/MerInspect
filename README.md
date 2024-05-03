@@ -1,8 +1,8 @@
 # MerInspect Continued
 
-Support **WotLK Classic** (3.4.3) and **Classic Era** (1.15.1) 
+Support **Cataclysm Classic** (4.4.0) and **Classic Era** (1.15.2) 
 
-支持 **巫妖王之怒** (3.4.3) 和 **经典旧世** (1.15.1) 
+支持 **大地的裂变** (4.4.0) 和 **经典旧世** (1.15.2) 
 
 ## Install & Auto-update via WowUp
 
