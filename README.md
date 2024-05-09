@@ -4,6 +4,8 @@ Support **Cataclysm Classic** (4.4.0) and **Classic Era** (1.15.2)
 
 支持 **大地的裂变** (4.4.0) 和 **经典旧世** (1.15.2) 
 
+Mainline version ➡ [TinyInspect](https://github.com/Witnesscm/TinyInspect)
+
 ## Install & Auto-update via WowUp
 
 1. Downlaod and install `WowUp with Curseforge` or `WowUp with Wago` from [WowUp.io](https://wowup.io/).
