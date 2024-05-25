@@ -986,20 +986,10 @@ end
 -- C_Engraving.IsEquipmentSlotEngravable
 function lib:IsEquipmentSlotEngravable(slot)
     if not lib.RuneCategories then
-        if GetMaxPlayerLevel() == 40 then -- phase2
-            lib.RuneCategories = {
-                [5] = true,
-                [6] = true,
-                [7] = true,
-                [8] = true,
-                [10] = true,
-            }
-        else
-            lib.RuneCategories = {}
-            C_Engraving.RefreshRunesList()
-            for _, categories in ipairs(C_Engraving.GetRuneCategories(false, false)) do
-                lib.RuneCategories[categories] = true
-            end
+        lib.RuneCategories = {}
+        C_Engraving.RefreshRunesList()
+        for _, categories in ipairs(C_Engraving.GetRuneCategories(false, false)) do
+            lib.RuneCategories[categories] = true
         end
     end
 
