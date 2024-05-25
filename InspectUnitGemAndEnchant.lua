@@ -221,7 +221,7 @@ local function ShowGemAndEnchant(frame, ItemLink, anchorFrame, itemframe, unit)
             icon:Show()
             anchorFrame = icon
         end
-    elseif ns.IsWrath and itemframe.index == INVSLOT_WAIST then
+    elseif not ns.IsClassic and itemframe.index == INVSLOT_WAIST then
         local gemNum = LibItemGem:GetItemGemInfo(ItemLink)
         if gemNum == #info then
             num = num + 1
