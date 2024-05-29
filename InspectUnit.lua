@@ -243,7 +243,7 @@ end)
 
 LibEvent:attachTrigger("INSPECT_FRAME_SHOWN", function(self, frame, parent, ilevel)
     local x, y, f = 0, 0, parent:GetName()
-    if (f == "InspectFrame" or (f == "PaperDollFrame" and not ns.IsCata)) then
+    if (f == "InspectFrame" or (f == "PaperDollFrame" and ns.IsClassic)) then
         x, y = 33, 14
     end
     -- SoD rune frame

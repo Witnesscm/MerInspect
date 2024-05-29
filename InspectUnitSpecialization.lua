@@ -21,7 +21,7 @@ local function GetInspectTalentInfo(unit)
         cache[i] = {}
 
         local name, icon, point, _
-        if ns.IsCata then
+        if not ns.IsClassic then
             _, name, _, icon, point = GetTalentTabInfo(i, isInspect, false, talentGroup)
         else
             name, icon, point = GetTalentTabInfo(i, isInspect, false, talentGroup)
