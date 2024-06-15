@@ -11,6 +11,8 @@ local addon, ns = ...
 
 ns.IsClassic = _G.WOW_PROJECT_ID == _G.WOW_PROJECT_CLASSIC
 ns.IsClassicSoD = ns.IsClassic and C_Engraving and C_Engraving.IsEngravingEnabled()
+ns.IsClassicNewPatch = ns.IsClassic and select(4, GetBuildInfo()) >= 11503 -- 1.15.3
+ns.IsWrath = _G.WOW_PROJECT_ID == _G.WOW_PROJECT_WRATH_CLASSIC
 ns.IsCata = _G.WOW_PROJECT_ID == _G.WOW_PROJECT_CATACLYSM_CLASSIC
 
 local L = ns.L or {}
