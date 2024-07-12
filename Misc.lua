@@ -21,3 +21,10 @@ do
         hooksecurefunc("ToggleEngravingFrame", ReanchorInspect)
     end
 end
+
+-- Raise the layering strata of WotLK gear manager dialog
+do
+    if ns.IsWrath and GearManagerDialog then
+        GearManagerDialog:SetFrameStrata("HIGH")
+    end
+end
