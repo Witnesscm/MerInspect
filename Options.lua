@@ -21,6 +21,8 @@ setmetatable(L, { __index = function(_, k)
     return k:gsub("([a-z])([A-Z])", "%1 %2")
 end})
 
+ns.L = L
+
 local DefaultDB = {
     version = VERSION,
     ShowItemSlotString = false,              --物品部位文字
