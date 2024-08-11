@@ -140,7 +140,7 @@ end
 local function ShowGemAndEnchant(frame, ItemLink, anchorFrame, itemframe, unit)
     if (not ItemLink) then return 0 end
     local num, info = 0 , {}
-    local _, quality, texture, icon, r, g, b
+    local icon
     if not ns.IsClassic then
         num, info = LibItemGem:GetItemGemInfo(ItemLink, unit, itemframe.index)
     end
