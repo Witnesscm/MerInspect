@@ -25,6 +25,6 @@ end
 -- Raise the layering strata of WotLK gear manager dialog
 do
     if ns.IsWrath and GearManagerDialog then
-        GearManagerDialog:SetFrameStrata("HIGH")
+        GearManagerDialog:SetFrameLevel(6)
     end
 end
