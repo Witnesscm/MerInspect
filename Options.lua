@@ -201,13 +201,13 @@ local function InitCheckbox(parent)
     end
 end
 
-local frame = CreateFrame("Frame", nil, UIParent)
+local frame = CreateFrame("Frame")
 frame.title = frame:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge")
 frame.title:SetPoint("TOPLEFT", 18, -16)
 frame.title:SetText(addon)
-frame.name = addon
-
 CreateCheckbox(options, frame, frame.title, 18, 9)
+local category = Settings.RegisterCanvasLayoutCategory(frame, addon)
+Settings.RegisterAddOnCategory(category)
 
 LibEvent:attachEvent("VARIABLES_LOADED", function()
     if (not MerInspectDB or not MerInspectDB.version) then
@@ -223,10 +223,8 @@ LibEvent:attachEvent("VARIABLES_LOADED", function()
     InitCheckbox(frame)
 end)
 
-InterfaceOptions_AddCategory(frame)
 SLASH_MerInspect1 = "/merinspect"
 SLASH_MerInspect2 = "/mi"
 function SlashCmdList.MerInspect(msg, editbox)
-    InterfaceOptionsFrame_OpenToCategory(frame)
-    InterfaceOptionsFrame_OpenToCategory(frame)
+    Settings.OpenToCategory(category.ID)
 end
