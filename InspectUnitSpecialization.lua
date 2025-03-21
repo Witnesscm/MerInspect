@@ -20,12 +20,7 @@ local function GetInspectTalentInfo(unit)
     for i = 1, 3 do
         cache[i] = {}
 
-        local name, icon, point, _
-        if ns.IsCata or ns.IsClassicNewPatch then
-            _, name, _, icon, point = GetTalentTabInfo(i, isInspect, false, talentGroup)
-        else
-            name, icon, point = GetTalentTabInfo(i, isInspect, false, talentGroup)
-        end
+        local _, name, _, icon, point = GetTalentTabInfo(i, isInspect, false, talentGroup)
 
         if point > higher then
             higher = point
