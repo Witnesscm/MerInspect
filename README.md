@@ -1,8 +1,8 @@
 # MerInspect Continued
 
-Support **Cataclysm Classic** (4.4.2), **WotLK Classic** (3.4.4) and **Classic Era** (1.15.6) 
+Support **Mists of Pandaria Classic** (5.5.0) , **Cataclysm Classic** (4.4.2), **WotLK Classic** (3.4.4) and **Classic Era** (1.15.6) 
 
-支持 **大地的裂变** (4.4.2) , **巫妖王之怒** (3.4.4) 和 **经典旧世** (1.15.6) 
+支持 **熊猫人之谜** (5.5.0) , **大地的裂变** (4.4.2) , **巫妖王之怒** (3.4.4) 和 **经典旧世** (1.15.6) 
 
 Mainline version ➡ [TinyInspect](https://github.com/Witnesscm/TinyInspect)
 
