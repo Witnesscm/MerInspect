@@ -9,10 +9,12 @@ local VERSION = 1.0
 
 local addon, ns = ...
 
+ns.GameVersion = select(4, GetBuildInfo())
 ns.IsClassic = _G.WOW_PROJECT_ID == _G.WOW_PROJECT_CLASSIC
 ns.IsClassicSoD = ns.IsClassic and C_Engraving and C_Engraving.IsEngravingEnabled()
 ns.IsWrath = _G.WOW_PROJECT_ID == _G.WOW_PROJECT_WRATH_CLASSIC
 ns.IsCata = _G.WOW_PROJECT_ID == _G.WOW_PROJECT_CATACLYSM_CLASSIC
+ns.IsMists = _G.WOW_PROJECT_ID == _G.WOW_PROJECT_MISTS_CLASSIC
 
 local L = ns.L or {}
 
@@ -32,7 +34,7 @@ local DefaultDB = {
     ShowInspectColoredLabel = true,         --觀察面板顔色隨物品品質
     ShowInspectItemSheet = true,            --顯示观察对象装备列表
         ShowOwnFrameWhenInspecting = false,  --觀察同時顯示自己裝備列表
-        ShowItemStats = true,                --顯示裝備屬性統計
+        ShowItemStats = false,                --顯示裝備屬性統計
 }
 
 local options = {

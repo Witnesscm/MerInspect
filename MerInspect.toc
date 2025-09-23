@@ -1,4 +1,4 @@
-## Interface: 40402, 30404, 11506
+## Interface: 50501, 50500, 40402, 30405, 11507
 ## Title: MerInspect
 ## Version: @project-version@
 ## Notes: Inspect Assiest

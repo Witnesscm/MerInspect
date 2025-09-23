@@ -12,30 +12,25 @@ local LibItemGem = LibStub:GetLibrary("LibItemGem.7000")
 local LibSchedule = LibStub:GetLibrary("LibSchedule.7000")
 local LibItemEnchant = LibStub:GetLibrary("LibItemEnchant.7000")
 
-local EnchantParts = {
-    [1] = HEADSLOT,
-    [3] = SHOULDERSLOT,
-    [5]  = CHESTSLOT,
-    [7] = LEGSSLOT,
-    [8]  = FEETSLOT,
-    [9]  = WRISTSLOT,
-    [10] = HANDSSLOT,
-    [15] = BACKSLOT,
-    [16] = MAINHANDSLOT,
-    [17] = SECONDARYHANDSLOT,
+local INVTYPE_ENCHANT = {
+    ["INVTYPE_HEAD"] = ns.IsWrath or ns.IsCata,
+    ["INVTYPE_SHOULDER"] = ns.IsWrath or ns.IsCata,
+    ["INVTYPE_CHEST"] = true,
+    ["INVTYPE_ROBE"] = true,
+    ["INVTYPE_LEGS"] = not ns.IsClassic,
+    ["INVTYPE_FEET"] = true,
+    ["INVTYPE_WRIST"] = true,
+    ["INVTYPE_HAND"] = true,
+    ["INVTYPE_CLOAK"] = true,
+    ["INVTYPE_WEAPON"] = true,
+    ["INVTYPE_RANGED"] = true,
+    ["INVTYPE_2HWEAPON"] = true,
+    ["INVTYPE_WEAPONMAINHAND"] = true,
+    ["INVTYPE_WEAPONOFFHAND"] = true,
+    ["INVTYPE_RANGEDRIGHT"] = ns.IsMists,
+    ["INVTYPE_SHIELD"] = true,
+    ["INVTYPE_HOLDABLE"] = ns.IsMists,
 }
-
-if ns.IsClassic then
-    EnchantParts = {
-        [5]  = CHESTSLOT,
-        [8]  = FEETSLOT,
-        [9]  = WRISTSLOT,
-        [10] = HANDSSLOT,
-        [15] = BACKSLOT,
-        [16] = MAINHANDSLOT,
-        [17] = SECONDARYHANDSLOT,
-    }
-end
 
 --創建圖標框架
 local function CreateIconFrame(frame, index)
@@ -68,13 +63,13 @@ local function CreateIconFrame(frame, index)
         end
     end)
     icon.bg = icon:CreateTexture(nil, "BACKGROUND")
-    icon.bg:SetSize(16, 16)
+    icon.bg:SetSize(15, 15)
     icon.bg:SetPoint("CENTER")
-    icon.bg:SetTexture("Interface\\AddOns\\"..addon.."\\texture\\GemBg")
+    icon.bg:SetTexture("Interface\\Masks\\CircleMaskScalable")
     icon.texture = icon:CreateTexture(nil, "BORDER")
     icon.texture:SetSize(12, 12)
     icon.texture:SetPoint("CENTER")
-    icon.texture:SetMask("Interface\\FriendsFrame\\Battlenet-Portrait")
+    icon.texture:SetMask("Interface\\Masks\\CircleMaskScalable")
     frame["xicon"..index] = icon
     return frame["xicon"..index]
 end
@@ -190,19 +185,16 @@ local function ShowGemAndEnchant(frame, ItemLink, anchorFrame, itemframe, unit)
         icon:SetPoint("LEFT", anchorFrame, "RIGHT", num == 1 and 6 or 1, 0)
         icon:Show()
         anchorFrame = icon
-    elseif (not enchantID and EnchantParts[itemframe.index]) then
-        local itemEquip = select(9, GetItemInfo(ItemLink))
-        if (itemframe.index ~= INVSLOT_OFFHAND) or (itemEquip ~= "INVTYPE_HOLDABLE") then
-            num = num + 1
-            icon = GetIconFrame(frame)
-            icon.title = ENCHANTS .. ": " .. EnchantParts[itemframe.index]
-            icon.bg:SetVertexColor(1, 0.2, 0.2, 0.6)
-            icon.texture:SetTexture("Interface\\Cursor\\Quest")
-            icon:ClearAllPoints()
-            icon:SetPoint("LEFT", anchorFrame, "RIGHT", num == 1 and 6 or 1, 0)
-            icon:Show()
-            anchorFrame = icon
-        end
+    elseif (not enchantID and INVTYPE_ENCHANT[itemframe.equipLoc]) then
+        num = num + 1
+        icon = GetIconFrame(frame)
+        icon.title = ENCHANTS .. ": " .. itemframe.slot
+        icon.bg:SetVertexColor(1, 0.2, 0.2, 0.6)
+        icon.texture:SetTexture("Interface\\Cursor\\Quest")
+        icon:ClearAllPoints()
+        icon:SetPoint("LEFT", anchorFrame, "RIGHT", num == 1 and 6 or 1, 0)
+        icon:Show()
+        anchorFrame = icon
     elseif not ns.IsClassic and itemframe.index == INVSLOT_WAIST then
         local gemNum = LibItemGem:GetItemGemInfo(ItemLink)
         if gemNum == #info then

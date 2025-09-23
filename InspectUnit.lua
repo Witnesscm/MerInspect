@@ -28,8 +28,11 @@ local slots = {
     { index = 15, name = BACKSLOT, },
     { index = 16, name = MAINHANDSLOT, },
     { index = 17, name = SECONDARYHANDSLOT, },
-    { index = 18, name = RANGEDSLOT, },
 }
+
+if ns.GameVersion < 50000 then
+    table.insert(slots, { index = 18, name = RANGEDSLOT })
+end
 
 --創建面板
 local function GetInspectItemListFrame(parent)
@@ -74,6 +77,7 @@ local function GetInspectItemListFrame(parent)
             itemframe = CreateFrame("Button", nil, frame, "BackdropTemplate")
             itemframe:SetSize(120, (height-80)/#slots)
             itemframe.index = v.index
+            itemframe.slot = v.name
             itemframe.backdrop = backdrop
             if (i == 1) then
                 itemframe:SetPoint("TOPLEFT", frame, "TOPLEFT", 15, -68)
@@ -159,7 +163,7 @@ function ShowInspectItemListFrame(unit, parent, ilevel, maxLevel)
     frame.title:SetTextColor(color.r, color.g, color.b)
     frame.level:SetText(format(ItemLevelPattern, ilevel))
     frame.level:SetTextColor(1, 0.82, 0)
-    local _, name, level, link, quality
+    local _, name, level, link, quality, equipLoc
     local itemframe, mframe, oframe, itemwidth
     local width = 160
     local formats = "%2s"
@@ -167,12 +171,13 @@ function ShowInspectItemListFrame(unit, parent, ilevel, maxLevel)
         formats = "%" .. string.len(floor(maxLevel)) .. "s"
     end
     for i, v in ipairs(slots) do
-        level, name, link, quality = LibItemInfo:GetUnitItemIndexLevel(unit, v.index)
+        level, name, link, quality, _, _, _, _, _, equipLoc = LibItemInfo:GetUnitItemIndexLevel(unit, v.index)
         itemframe = frame["item"..i]
         itemframe.name = name
         itemframe.link = link
         itemframe.level = level
         itemframe.quality = quality
+        itemframe.equipLoc = equipLoc
         itemframe.itemString:SetWidth(0)
         if (level > 0) then
             itemframe.levelString:SetText(format(formats,level))
@@ -243,7 +248,7 @@ end)
 
 LibEvent:attachTrigger("INSPECT_FRAME_SHOWN", function(self, frame, parent, ilevel)
     local x, y, f = 0, 0, parent:GetName()
-    if (f == "InspectFrame" or (f == "PaperDollFrame" and not ns.IsCata)) then
+    if (f == "InspectFrame" or (f == "PaperDollFrame" and (ns.IsClassic or ns.IsWrath))) then
         x, y = 33, 14
     end
     -- SoD rune frame
@@ -330,7 +335,7 @@ LibEvent:attachTrigger("TogglePlayerStatsFrame", function(self, frame, bool, for
             PlayerStatsFrame:SetStats(stats):Show()
             if (frame.inspectFrame and frame.inspectFrame:IsShown()) then
                 PlayerStatsFrame:SetPoint("TOPLEFT", frame.inspectFrame, "TOPRIGHT", 1, 0)
-            elseif (not frame:GetName()) or (frame == PaperDollFrame and ns.IsCata) then
+            elseif (not frame:GetName()) or (frame == PaperDollFrame and not (ns.IsClassic or ns.IsWrath)) then
                 PlayerStatsFrame:SetPoint("TOPLEFT", frame, "TOPRIGHT", 1, 0)
             else
                 PlayerStatsFrame:SetPoint("TOPLEFT", frame, "TOPRIGHT", -32, -14)

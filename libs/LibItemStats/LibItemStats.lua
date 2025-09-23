@@ -336,7 +336,7 @@ function lib:GetUnitStats(unit, stats)
     stats.unit = unit
     self:GetUnitItemStats(unit, stats)
     self:GetUnitBuffStats(unit, stats)
-    self:GetUnitTalentStats(unit, stats, class, race, level)
+    -- self:GetUnitTalentStats(unit, stats, class, race, level)
     self:GetUnitRaceStats(unit, stats, class, race, level)
     return CalculateStatLogic(unit, stats)
 end
