@@ -37,7 +37,7 @@ if ns.GameVersion < 50000 then
             frame.specicon:SetSize(42, 42)
             frame.specicon:SetPoint("TOPRIGHT", -10, -11)
             frame.specicon:SetAlpha(0.6)
-            frame.specicon:SetMask("Interface\\Minimap\\UI-Minimap-Background")
+            frame.specicon:SetMask("Interface\\Masks\\CircleMaskScalable")
             frame.classicon = frame:CreateTexture(nil, "BORDER")
             frame.classicon:SetSize(42, 42)
             frame.classicon:SetPoint("TOPRIGHT", -10, -11)
