@@ -8,6 +8,14 @@ local lib = LibStub:NewLibrary(MAJOR, MINOR)
 
 if not lib then return end
 
+local IsMists = select(4, GetBuildInfo()) >= 50000
+
+--物品等級匹配規則
+local ItemLevelPattern = gsub(ITEM_LEVEL, "%%d", "(%%d+)")
+
+--Toolip
+local tooltip = CreateFrame("GameTooltip", "LibItemLevelScanTooltip", nil, "GameTooltipTemplate")
+
 --物品是否已經本地化
 function lib:HasLocalCached(item)
     if (not item or item == "" or item == "0") then return true end
@@ -45,7 +53,19 @@ function lib:GetItemLevel(link, stats)
         return -1
     end
     self:GetItemStats(link, stats)
-    local level = select(4, C_Item.GetItemInfo(link))
+    local text, level
+    if IsMists then
+        tooltip:SetOwner(UIParent, "ANCHOR_NONE")
+        tooltip:SetHyperlink(link)
+        for i = 2, 5 do
+            if (_G[tooltip:GetName() .. "TextLeft" .. i]) then
+                text = _G[tooltip:GetName() .. "TextLeft" .. i]:GetText() or ""
+                level = string.match(text, ItemLevelPattern)
+                if (level) then break end
+            end
+        end
+    end
+    level = level or C_Item.GetDetailedItemLevelInfo(link)
     return tonumber(level) or 0
 end
 
