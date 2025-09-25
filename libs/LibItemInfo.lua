@@ -8,17 +8,11 @@ local lib = LibStub:NewLibrary(MAJOR, MINOR)
 
 if not lib then return end
 
-local locale = GetLocale()
-
---Toolip
-local tooltip = CreateFrame("GameTooltip", "ClassicLibItemLevelTooltip1", UIParent, "GameTooltipTemplate")
-local unittip = CreateFrame("GameTooltip", "ClassicLibItemLevelTooltip2", UIParent, "GameTooltipTemplate")
-
 --物品是否已經本地化
 function lib:HasLocalCached(item)
     if (not item or item == "" or item == "0") then return true end
     if (tonumber(item)) then
-        return select(10, GetItemInfo(tonumber(item)))
+        return select(10, C_Item.GetItemInfo(tonumber(item)))
     else
         local id, gem1, gem2, gem3 = string.match(item, "item:(%d+):[^:]*:(%d-):(%d-):(%d-):")
         return self:HasLocalCached(id) and self:HasLocalCached(gem1) and self:HasLocalCached(gem2) and self:HasLocalCached(gem3)
@@ -51,32 +45,22 @@ function lib:GetItemLevel(link, stats)
         return -1
     end
     self:GetItemStats(link, stats)
-    local level = select(4, GetItemInfo(link))
+    local level = select(4, C_Item.GetItemInfo(link))
     return tonumber(level) or 0
 end
 
 --獲取容器物品裝等
 function lib:GetContainerItemLevel(pid, id)
-    local link = GetContainerItemLink(pid, id)
-    return self:GetItemLevel(link), GetItemInfo(link)
-end
-
---獲取UNIT對應部位的物品LINK
-function lib:GetUnitItemIndexLink(unit, index)
-    if (not UnitExists(unit)) then return end
-    unittip:SetOwner(UIParent, "ANCHOR_NONE")
-    unittip:SetInventoryItem(unit, index)
-    return GetInventoryItemLink(unit, index) or (select(2, unittip:GetItem()))
+    local link = C_Container.GetContainerItemLink(pid, id)
+    return self:GetItemLevel(link), C_Item.GetItemInfo(link)
 end
 
 --獲取UNIT對應部位的物品等級
 function lib:GetUnitItemIndexLevel(unit, index, stats)
     if (not UnitExists(unit)) then return -1 end
-    unittip:SetOwner(UIParent, "ANCHOR_NONE")
-    unittip:SetInventoryItem(unit, index)
-    local link = GetInventoryItemLink(unit, index) or select(2, unittip:GetItem())
+    local link = GetInventoryItemLink(unit, index)
     if (link) then
-        return self:GetItemLevel(link, stats), GetItemInfo(link)
+        return self:GetItemLevel(link, stats), C_Item.GetItemInfo(link)
     else
         return -1
     end

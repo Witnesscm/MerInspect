@@ -63,7 +63,7 @@ local function SetItemSlotString(self, class, equipSlot, link)
 end
 
 --設置物品部位
-local function SetItemSlot(self, link, BagID, SlotID)
+local function SetItemSlot(self, link)
     if (not self) then return end
     local frame = GetItemSlotFrame(self)
     if (self.OrigItemLink == link) then
@@ -71,11 +71,7 @@ local function SetItemSlot(self, link, BagID, SlotID)
     end
     local _, class, subclass, equipSlot
     if (link and (string.match(link, "item:(%d+):") or tonumber(link))) then
-        if (BagID and SlotID and (category == "Bag" or category == "AltEquipment")) then
-            _, _, _, _, _, _, class, subclass, _, equipSlot = LibItemInfo:GetContainerItemLevel(BagID, SlotID)
-        else
-            _, _, _, _, _, class, subclass, _, equipSlot = GetItemInfo(link)
-        end
+        _, _, _, _, _, class, subclass, _, equipSlot = C_Item.GetItemInfo(link)
         if ((equipSlot and string.find(equipSlot, "INVTYPE_"))
             or (subclass and string.find(subclass, RELICSLOT))
             or (subclass and subclass == MOUNTS)
@@ -106,14 +102,14 @@ end)
 if (PaperDollItemSlotButton_OnShow) then
     hooksecurefunc("PaperDollItemSlotButton_OnShow", function(self, isBag)
         local id = self:GetID()
-        local link = LibItemInfo:GetUnitItemIndexLink("player", id)
+        local link = GetInventoryItemLink("player", id)
         SetItemSlot(self, link)
     end)
 end
 if (PaperDollItemSlotButton_OnEvent) then
     hooksecurefunc("PaperDollItemSlotButton_OnEvent", function(self, event, id, ...)
         if (event == "PLAYER_EQUIPMENT_CHANGED" and self:GetID() == id) then
-            local link = LibItemInfo:GetUnitItemIndexLink("player", id)
+            local link = GetInventoryItemLink("player", id)
             SetItemSlot(self, link)
         end
     end)
@@ -131,7 +127,7 @@ LibEvent:attachTrigger("UNIT_INSPECT_READY", function(self, data)
             }) do
             if (not button) then return end
             local id = button:GetID()
-            local link = LibItemInfo:GetUnitItemIndexLink(InspectFrame.unit, id)
+            local link = GetInventoryItemLink(InspectFrame.unit, id)
             SetItemSlot(button, link)
         end
     end
@@ -167,7 +163,7 @@ local function ChatItemSlot(Hyperlink)
     end
     local slot
     local link = string.match(Hyperlink, "|H(.-)|h")
-    local name, _, quality, level, _, class, subclass, _, equipSlot = GetItemInfo(link)
+    local name, _, quality, level, _, class, subclass, _, equipSlot = C_Item.GetItemInfo(link)
     if (equipSlot == "INVTYPE_CLOAK" or equipSlot == "INVTYPE_TRINKET" or equipSlot == "INVTYPE_FINGER" or equipSlot == "INVTYPE_NECK") then
         slot = _G[equipSlot] or equipSlot
     elseif (equipSlot == "INVTYPE_RANGEDRIGHT" or equipSlot == "INVTYPE_NON_EQUIP_IGNORE") then

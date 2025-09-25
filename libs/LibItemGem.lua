@@ -68,7 +68,7 @@ function lib:GetItemGemInfo(ItemLink, unit, slot)
 
     local name, link
     for i = 1, 4 do
-        name, link = GetItemGem(ItemLink, i)
+        name, link = C_Item.GetItemGem(ItemLink, i)
         if (link) then
             if (info[i]) then
                 info[i].name = name
