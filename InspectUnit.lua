@@ -171,7 +171,7 @@ function ShowInspectItemListFrame(unit, parent, ilevel, maxLevel)
         formats = "%" .. string.len(floor(maxLevel)) .. "s"
     end
     for i, v in ipairs(slots) do
-        level, name, link, quality, _, _, _, _, _, equipLoc = LibItemInfo:GetUnitItemIndexLevel(unit, v.index)
+        level, name, link, quality, _, _, _, _, _, equipLoc = LibItemInfo:GetUnitItemInfo(unit, v.index)
         itemframe = frame["item"..i]
         itemframe.name = name
         itemframe.link = link

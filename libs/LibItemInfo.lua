@@ -53,36 +53,71 @@ function lib:GetItemLevel(link, stats)
         return -1
     end
     self:GetItemStats(link, stats)
-    local text, level
-    if IsMists then
+    local level = C_Item.GetDetailedItemLevelInfo(link)
+    return tonumber(level) or 0
+end
+
+if IsMists then
+    --獲取容器物品裝等
+    function lib:GetContainerItemLevel(pid, id)
+        local link = C_Container.GetContainerItemLink(pid, id)
+        if (not link or link == "") then
+            return -1
+        end
+        if (pid < 0) then
+            return self:GetItemLevel(link), C_Item.GetItemInfo(link)
+        end
+        local text, level
+        if (pid and id) then
+            tooltip:SetOwner(UIParent, "ANCHOR_NONE")
+            tooltip:SetBagItem(pid, id)
+            for i = 2, 5 do
+                if (_G[tooltip:GetName() .. "TextLeft" .. i]) then
+                    text = _G[tooltip:GetName() .. "TextLeft" .. i]:GetText() or ""
+                    level = string.match(text, ItemLevelPattern)
+                    if (level) then break end
+                end
+            end
+        end
+        return tonumber(level) or 0, C_Item.GetItemInfo(link)
+    end
+
+    --獲取UNIT對應部位的物品等級
+    function lib:GetUnitItemInfo(unit, index, stats)
+        if (not UnitExists(unit)) then return -1 end
+        local link = GetInventoryItemLink(unit, index)
+        if (not link or link == "") then
+            return -1
+        end
         tooltip:SetOwner(UIParent, "ANCHOR_NONE")
-        tooltip:SetHyperlink(link)
-        for i = 2, tooltip:NumLines() do
+        tooltip:SetInventoryItem(unit, index)
+        local text, level
+        for i = 2, 5 do
             if (_G[tooltip:GetName() .. "TextLeft" .. i]) then
                 text = _G[tooltip:GetName() .. "TextLeft" .. i]:GetText() or ""
                 level = string.match(text, ItemLevelPattern)
                 if (level) then break end
             end
         end
+        self:GetItemStats(link, stats)
+        return tonumber(level) or 0, C_Item.GetItemInfo(link)
     end
-    level = level or C_Item.GetDetailedItemLevelInfo(link)
-    return tonumber(level) or 0
-end
+else
+    --獲取容器物品裝等
+    function lib:GetContainerItemLevel(pid, id)
+        local link = C_Container.GetContainerItemLink(pid, id)
+        return self:GetItemLevel(link), C_Item.GetItemInfo(link)
+    end
 
---獲取容器物品裝等
-function lib:GetContainerItemLevel(pid, id)
-    local link = C_Container.GetContainerItemLink(pid, id)
-    return self:GetItemLevel(link), C_Item.GetItemInfo(link)
-end
-
---獲取UNIT對應部位的物品等級
-function lib:GetUnitItemIndexLevel(unit, index, stats)
-    if (not UnitExists(unit)) then return -1 end
-    local link = GetInventoryItemLink(unit, index)
-    if (link) then
-        return self:GetItemLevel(link, stats), C_Item.GetItemInfo(link)
-    else
-        return -1
+    --獲取UNIT對應部位的物品等級
+    function lib:GetUnitItemInfo(unit, index, stats)
+        if (not UnitExists(unit)) then return -1 end
+        local link = GetInventoryItemLink(unit, index)
+        if (link) then
+            return self:GetItemLevel(link, stats), C_Item.GetItemInfo(link)
+        else
+            return -1
+        end
     end
 end
 
@@ -93,16 +128,16 @@ function lib:GetUnitItemLevel(unit, stats)
     local level, mainhand, offhand, ranged
     for i = 1, 15 do
         if (i ~= 4) then
-            level = self:GetUnitItemIndexLevel(unit, i, stats)
+            level = self:GetUnitItemInfo(unit, i, stats)
             if (level > 0) then
                 total = total + level
                 maxlevel = max(maxlevel, level)
             end
         end
     end
-    mainhand = self:GetUnitItemIndexLevel(unit, 16, stats)
-    offhand = self:GetUnitItemIndexLevel(unit, 17, stats)
-    ranged = self:GetUnitItemIndexLevel(unit, 18, stats)
+    mainhand = self:GetUnitItemInfo(unit, 16, stats)
+    offhand = self:GetUnitItemInfo(unit, 17, stats)
+    ranged = self:GetUnitItemInfo(unit, 18, stats)
     if (mainhand <= 0 and ranged <= 0 and ranged <= 0) then
     elseif (mainhand > 0 and offhand > 0) then
         total = total + mainhand + offhand
