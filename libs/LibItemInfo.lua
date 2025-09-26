@@ -57,7 +57,7 @@ function lib:GetItemLevel(link, stats)
     if IsMists then
         tooltip:SetOwner(UIParent, "ANCHOR_NONE")
         tooltip:SetHyperlink(link)
-        for i = 2, 5 do
+        for i = 2, tooltip:NumLines() do
             if (_G[tooltip:GetName() .. "TextLeft" .. i]) then
                 text = _G[tooltip:GetName() .. "TextLeft" .. i]:GetText() or ""
                 level = string.match(text, ItemLevelPattern)
