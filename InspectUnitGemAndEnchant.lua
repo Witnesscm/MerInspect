@@ -14,7 +14,7 @@ local LibItemEnchant = LibStub:GetLibrary("LibItemEnchant.7000")
 
 local INVTYPE_ENCHANT = {
     ["INVTYPE_HEAD"] = ns.IsWrath or ns.IsCata,
-    ["INVTYPE_SHOULDER"] = ns.IsWrath or ns.IsCata,
+    ["INVTYPE_SHOULDER"] = not ns.IsClassic,
     ["INVTYPE_CHEST"] = true,
     ["INVTYPE_ROBE"] = true,
     ["INVTYPE_LEGS"] = not ns.IsClassic,
