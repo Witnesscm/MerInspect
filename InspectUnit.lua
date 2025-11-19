@@ -248,12 +248,12 @@ end)
 
 LibEvent:attachTrigger("INSPECT_FRAME_SHOWN", function(self, frame, parent, ilevel)
     local x, y, f = 0, 0, parent:GetName()
-    if (f == "PaperDollFrame" and ns.GameVersion < 40000) then
+    if ((f == "PaperDollFrame" or f == "InspectFrame") and parent:GetHeight() > 500) then
         x, y = 33, 14
     end
     -- SoD rune frame
     if (f == "PaperDollFrame" and EngravingFrame and EngravingFrame:IsVisible()) then
-        x = -178
+        x = x - 211
     end
     local backdrop = frame:GetBackdrop()
     if (MerInspectDB and MerInspectDB.ShowInspectAngularBorder) then
@@ -335,7 +335,7 @@ LibEvent:attachTrigger("TogglePlayerStatsFrame", function(self, frame, bool, for
             PlayerStatsFrame:SetStats(stats):Show()
             if (frame.inspectFrame and frame.inspectFrame:IsShown()) then
                 PlayerStatsFrame:SetPoint("TOPLEFT", frame.inspectFrame, "TOPRIGHT", 1, 0)
-            elseif (not frame:GetName()) or (frame == PaperDollFrame and ns.GameVersion > 40000) then
+            elseif (not frame:GetName()) or (frame == PaperDollFrame and frame:GetHeight() < 500) then
                 PlayerStatsFrame:SetPoint("TOPLEFT", frame, "TOPRIGHT", 1, 0)
             else
                 PlayerStatsFrame:SetPoint("TOPLEFT", frame, "TOPRIGHT", -32, -14)
